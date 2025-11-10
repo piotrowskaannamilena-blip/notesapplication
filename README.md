@@ -44,3 +44,6 @@ npm run start
 ├── script.js
 /server.js (Main Express backend)
 /data.json (Storage for notes)
+
+<img width="1184" height="949" alt="image" src="https://github.com/user-attachments/assets/f1920da4-4a26-4cda-aa9d-5e5f9d760cba" />
+
