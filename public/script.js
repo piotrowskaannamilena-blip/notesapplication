@@ -14,8 +14,8 @@ document.addEventListener("DOMContentLoaded", () => {
       data.forEach((item) => {
         const div = document.createElement("div");
         div.innerHTML = `
-                  <h2>${item.title}</h2>
-                  <p>${item.text.replace(
+                  <h2>${item.text}</h2>
+                  <p>${item.description.replace(
                     /\n/g,
                     "<br>"
                   )}</p> 
@@ -24,8 +24,8 @@ document.addEventListener("DOMContentLoaded", () => {
                   <div class="buttons">
                       <button class="edit-btn" onclick="showEditForm(${
                         item.id
-                      }, '${item.title}', \`${
-          item.text
+                      }, '${item.text}', \`${
+          item.description
         }\`)"><i class="fa-solid fa-pen-to-square">Edit</i></button>
                       <button class="delete-btn" onclick="deleteNote(${
                         item.id
@@ -39,10 +39,50 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+// Function onclick edit form 
+  function showEditForm(id, currentTitle, currentDescription) {
+  const existingForm = document.querySelector(".edit-form");
+  if (existingForm) existingForm.remove();
+
+  document
+    .querySelectorAll("button")
+    .forEach((button) => (button.disabled = true));
+
+  const editForm = document.createElement("div");
+  editForm.classList.add("edit-form");
+  editForm.innerHTML = `
+      <div class="edit-card">
+          <h3>Edit Note</h3>
+          <input type="text" id="data-input" value="${currentTitle}" />
+          <textarea id="data-description">${currentDescription}</textarea>
+          <div class="buttons">
+              <button class="update-btn" onclick="updateNote(${id})"><i">Update</i></button>
+          </div>
+      </div>
+  `;
+  document.body.appendChild(editForm);
+}
+
+
+function updateNote(id) {
+  const newTitle = document.getElementById("data-input").value;
+  const newDescription = document.getElementById("data-description").value;
+  if (newTitle && newDescription) {
+    fetch(`/data/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: newTitle, description: newDescription }),
+    }).then(() => {
+      cancelEdit();
+      loadNotes();
+    });
+  }
+}
+
   // Handle form submission to add new data
   dataForm.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const newData = { text: dataInput.value };
+    const newData = { description: dataInput.value };
 
     try {
       const response = await fetch("/data", {
@@ -68,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fetch("/data", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: noteTitle, description: noteDescription }),
+      body: JSON.stringify({ text: noteTitle, description: noteDescription }),
     })
       .then((res) => res.json())
       .then(() => {
@@ -86,7 +126,7 @@ function updateNote(id) {
     fetch(`/data/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: newTitle, description: newDescription }),
+      body: JSON.stringify({ text: newTitle, description: newDescription }),
     }).then(() => {
       cancelEdit();
       fetchData();
