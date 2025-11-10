@@ -50,20 +50,20 @@ app.post("/data", (req, res) => {
   currentData.push(newData);
   writeData(currentData);
   res.json({ message: "Note saved successfully", data: newData });
-  res.status(201).json(newNote);
+  res.status(201).json(newData);
   console.log("Note saved successfully");
 });
 
 app.post("/data", (req, res) => {
   const notes = readData();
-  const newNote = {
+  const newData = {
     id: uuidv4(),
-    title: req.body.title,
+    text: req.body.text,
     description: req.body.description,
   };
-  notes.push(newNote);
+  notes.push(newData);
   writeData(notes);
-  res.status(201).json(newNote);
+  res.status(201).json(newData);
 });
 
 // Handle POST request at the /echo route
@@ -77,7 +77,7 @@ app.put("/data/:id", (req, res) => {
   let notes = readData();
   const noteIndex = notes.findIndex((n) => n.id == req.params.id);
   if (noteIndex !== -1) {
-    notes[noteIndex].title = req.body.title;
+    notes[noteIndex].text = req.body.text;
     notes[noteIndex].description = req.body.description;
     writeData(notes);
     res.json(notes[noteIndex]);
