@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
                   
                   <!-- Converts newlines to <br> -->
                   <div class="buttons">
-                      <button class="edit-btn" onclick="showEditForm(${
+                      <button class="edit-btn" onclick="showEditForms(${
                         note.id
                       }, '${note.text}', \`${
           note.description
@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
 // Function onclick edit form 
-  function showEditForm(id, currentTitle, currentDescription) {
+  function showEditForms(id, currentTitle, currentDescription) {
   const existingForm = document.querySelector(".edit-form");
   if (existingForm) existingForm.remove();
 
@@ -63,10 +63,10 @@ document.addEventListener("DOMContentLoaded", () => {
   document.body.appendChild(editForm);
 }
 
-
+// doesn't work to update note by ID
 function updateNote(id) {
-  const newTitle = dataInput.value;
-  const newDescription = dataDesc.value;
+  const newTitle = document.getElementById("editTitle").value;
+  const newDescription = document.getElementById("editDescription").value;
   if (newTitle && newDescription) {
     fetch(`/data/${id}`, {
       method: "PUT",
@@ -78,6 +78,7 @@ function updateNote(id) {
     });
   }
 }
+
 
   // Handle form submission to add new data
   dataForm.addEventListener("submit", async (event) => {
@@ -136,6 +137,9 @@ function updateNote(id) {
   // Delete button function by ID
   function deleteNote(id) {
   fetch(`/data/${id}`, { method: "DELETE" }).then(() => fetchData());
+  const editForm = document.getElementById("div");
+  editForm.remove(); // Remove item from UI
+
 }
 
   // Fetch data on page load
