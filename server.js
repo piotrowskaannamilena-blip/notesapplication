@@ -14,7 +14,7 @@ const PORT = 3000;
 app.use(express.json());
 
 // Serve static files from the 'public' directory
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "/public")));
 // Define the path to the JSON file
 const dataFilePath = path.join(__dirname, "data.json");
 
@@ -34,7 +34,7 @@ const writeData = (data) => {
 
 // Handle GET request at the root route
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.sendFile(path.join(__dirname, "/public", "index.html"));
 });
 
 // Handle GET request to retrieve stored data
@@ -92,9 +92,13 @@ app.put("/data/:id", (req, res) => {
 
 // Handle DELETE for unique ID
 app.delete("/data/:id", (req, res) => {
-  let notes = readData();
-  const filteredNotes = notes.filter((n) => n.id != req.params.id);
-  writeData(filteredNotes);
+  currentData = readData();
+  const noteIndex = currentData.findIndex((note) => noteid != req.params.id);
+  if (noteIndex == -1) {
+      return res.status(404).json({message: "Data not found"});
+    };
+  currentData.splice(noteIndex, 1)
+  writeData(currentData);
   res.json({ message: "Note deleted" });
   console.log("Note deleted");
 });
