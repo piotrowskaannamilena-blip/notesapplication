@@ -18,3 +18,27 @@ Implement **CRUD operations** (Create, Read, Update, Delete) for notes.
 Store notes **persistently** (e.g., using a JSON file or a database).
 Deploy the application on **Render.com**.
 
+1. **Initialize a new Node.js project**:
+   ```bash
+git clone https://github.com/piotrowskaannamilena-blip/notesapplication.git
+
+
+   npm init -y
+   ```
+
+2. Install Express:
+
+```bash
+npm install express
+```
+
+npm run start 
+
+3. Create the following files and folders:
+
+/public (Frontend assets - HTML, CSS, JS)
+├── index.html
+├── styles.css
+├── script.js
+/server.js (Main Express backend)
+/data.json (Storage for notes)
