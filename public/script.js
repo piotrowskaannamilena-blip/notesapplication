@@ -11,11 +11,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const response = await fetch("/data");
       const data = await response.json();
       dataList.innerHTML = ""; // Clear the list before rendering
-      data.forEach((item) => {
+      data.forEach((note) => {
         const div = document.createElement("div");
         div.innerHTML = `
-                  <h2>${item.text}</h2>
-                  <p>${item.description.replace(
+                  <h2>${note.text}</h2>
+                  <p>${note.description.replace(
                     /\n/g,
                     "<br>"
                   )}</p> 
@@ -23,13 +23,13 @@ document.addEventListener("DOMContentLoaded", () => {
                   <!-- Converts newlines to <br> -->
                   <div class="buttons">
                       <button class="edit-btn" onclick="showEditForm(${
-                        item.id
-                      }, '${item.text}', \`${
-          item.description
-        }\`)"><i class="fa-solid fa-pen-to-square">Edit</i></button>
+                        note.id
+                      }, '${note.text}', \`${
+          note.description
+        }\`)"><i>Edit</i></button>
                       <button class="delete-btn" onclick="deleteNote(${
-                        item.id
-                      })"><i class="fa-solid fa-trash">Delete</i></button>
+                        note.id
+                      })"><i>Delete</i></button>
                   </div>
               `;
         dataList.appendChild(div);
@@ -65,8 +65,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 function updateNote(id) {
-  const newTitle = document.getElementById("data-input").value;
-  const newDescription = document.getElementById("data-description").value;
+  const newTitle = dataInput.value;
+  const newDescription = dataDesc.value;
   if (newTitle && newDescription) {
     fetch(`/data/${id}`, {
       method: "PUT",
@@ -120,7 +120,7 @@ function updateNote(id) {
 });
 // Edit button function by ID
 function updateNote(id) {
-  const newTitle = document.getElementById("editTitle").value;
+  const newTitle = dataInput.value;
   const newDescription = dataDesc.value;
   if (newTitle && newDescription) {
     fetch(`/data/${id}`, {
@@ -128,7 +128,6 @@ function updateNote(id) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text: newTitle, description: newDescription }),
     }).then(() => {
-      cancelEdit();
       fetchData();
     });
   }
